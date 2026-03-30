@@ -193,7 +193,7 @@ export default function InventoryList({ category }: { category: string }) {
       .from("inventory_items")
       .select("*")
       .eq("category", category)
-      .order("created_at", { ascending: true }); // 名前順より作成順の方が見やすい場合がある
+      .order("last_updated", { ascending: true }); // 名前順より作成順の方が見やすい場合がある
 
     if (error) {
       console.error("Error fetching items:", error);
