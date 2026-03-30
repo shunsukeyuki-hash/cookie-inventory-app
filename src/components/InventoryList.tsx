@@ -75,12 +75,19 @@ function InventoryItemRow({
           className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-orange-400 focus:outline-none"
         />
         <label className="text-sm font-bold text-gray-700">単位</label>
-        <input
-          type="text"
+        <select
           value={editUnit}
           onChange={(e) => setEditUnit(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-orange-400 focus:outline-none"
-        />
+          className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-orange-400 focus:outline-none bg-white"
+        >
+          <option value="g">g</option>
+          <option value="kg">kg</option>
+          <option value="個">個</option>
+          <option value="袋">袋</option>
+          <option value="枚">枚</option>
+          <option value="箱">箱</option>
+          <option value="本">本</option>
+        </select>
         <div className="flex gap-2 mt-2 justify-end">
           <button
             onClick={() => setIsEditing(false)}
@@ -335,13 +342,19 @@ export default function InventoryList({ category }: { category: string }) {
             </div>
             <div className="flex-1">
               <label className="text-sm font-bold text-gray-700 block mb-1">単位</label>
-              <input
-                type="text"
-                placeholder={`例: ${defaultUnit}`}
+              <select
                 value={newUnit}
                 onChange={(e) => setNewUnit(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
-              />
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none bg-white"
+              >
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+                <option value="個">個</option>
+                <option value="袋">袋</option>
+                <option value="枚">枚</option>
+                <option value="箱">箱</option>
+                <option value="本">本</option>
+              </select>
             </div>
           </div>
           <div className="flex gap-2 mt-2">
