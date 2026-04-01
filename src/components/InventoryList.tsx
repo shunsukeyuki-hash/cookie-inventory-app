@@ -189,11 +189,34 @@ export default function InventoryList({ category }: { category: string }) {
   const [newName, setNewName] = useState("");
   const [newQuantity, setNewQuantity] = useState("0");
   const [newUnit, setNewUnit] = useState("g");
+  
+  // 新規アイテム名の履歴
+  const [nameHistory, setNameHistory] = useState<string[]>([]);
 
   useEffect(() => {
     fetchItems();
+    
+    // カテゴリごとの履歴をlocalStorageから読み込む
+    const storedHistory = localStorage.getItem(`item-name-history-${category}`);
+    if (storedHistory) {
+      try {
+        setNameHistory(JSON.parse(storedHistory));
+      } catch (e) {
+        console.error("Failed to parse name history", e);
+      }
+    } else {
+      setNameHistory([]);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
+
+  const saveNameToHistory = (name: string) => {
+    setNameHistory((prev) => {
+      const newList = [name, ...prev.filter((n) => n !== name)].slice(0, 50); // 重複を排除し、直近50件まで保持
+      localStorage.setItem(`item-name-history-${category}`, JSON.stringify(newList));
+      return newList;
+    });
+  };
 
   const fetchItems = async () => {
     setLoading(true);
@@ -281,6 +304,7 @@ export default function InventoryList({ category }: { category: string }) {
 
     if (!error && data) {
       setItems((prev) => [...prev, data]);
+      saveNameToHistory(newName); // 追加成功時に履歴を保存
       setIsAdding(false);
       setNewName("");
       setNewQuantity("0");
@@ -326,8 +350,14 @@ export default function InventoryList({ category }: { category: string }) {
               placeholder="例: クルミ"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
+              list={`name-history-${category}`}
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
             />
+            <datalist id={`name-history-${category}`}>
+              {nameHistory.map((name, i) => (
+                <option key={i} value={name} />
+              ))}
+            </datalist>
           </div>
           <div className="flex gap-3">
             <div className="flex-1">
