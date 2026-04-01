@@ -36,7 +36,7 @@ function InventoryItemRow({
 
   // 在庫数の直接入力保存
   const handleQuantitySave = () => {
-    const val = parseInt(inputValue, 10);
+    const val = parseFloat(inputValue);
     if (!isNaN(val) && val >= 0) {
       if (val !== item.quantity) {
         onUpdateQuantity(item.id, val);
@@ -127,6 +127,7 @@ function InventoryItemRow({
           <input
             type="number"
             min="0"
+            step="0.1"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onBlur={handleQuantitySave}
@@ -259,10 +260,9 @@ export default function InventoryList({ category }: { category: string }) {
     }
   };
 
-  // アイテムの新規作成
   const addItem = async () => {
     if (!newName.trim()) return;
-    const qty = parseInt(newQuantity, 10);
+    const qty = parseFloat(newQuantity);
     const validQty = isNaN(qty) || qty < 0 ? 0 : qty;
 
     const newItem = {
@@ -335,6 +335,7 @@ export default function InventoryList({ category }: { category: string }) {
               <input
                 type="number"
                 min="0"
+                step="0.1"
                 value={newQuantity}
                 onChange={(e) => setNewQuantity(e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none text-right"
